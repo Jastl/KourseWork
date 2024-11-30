@@ -4,10 +4,11 @@ namespace UserInterface
 {
     internal static class Proggram
     {
-        private static string commandList = "1 - Doctor menu\n2 - Appointments menu\n3 - Parient menu\n4 - Exit";
+        private static string commandList = "1 - Doctor menu\n2 - Appointments menu\n3 - Parient menu\n4 - Exit\n5 - Save\n6 - Load";
         private static string doctorcommandList = "1 - Add doctor\n2 - Delete doctor\n3 - Show all doctors\n4 - Return";
         public static void Main(string[] args)
         {
+            RegistyManager.LoadData();
             while (true)
             {
                 Console.WriteLine(commandList);
@@ -48,14 +49,14 @@ namespace UserInterface
                             Console.WriteLine("Doctor added");
                             break;
                         case "2":
-                            Console.Write("Choose doctor ID to delete ");
                             foreach (var doctor in RegistyManager.GetDoctors())
                             {
                                 if (doctor != null)
                                 {
-                                    Console.WriteLine($"ID: {doctor.Id}, Name: {doctor.FirstName}, Surname: {doctor.LastName}, Spec: {doctor.Specialization}");
+                                    Console.WriteLine(doctor);
                                 }
                             }
+                            Console.Write("Choose doctor ID to delete ");
                             if (int.TryParse(Console.ReadLine(), out int doctorId))
                             {
                                 RegistyManager.RemoveDoctor(doctorId);
@@ -72,7 +73,7 @@ namespace UserInterface
                             {
                                 if (doctor != null)
                                 {
-                                    Console.WriteLine($"ID: {doctor.Id}, Name: {doctor.FirstName}, Surname: {doctor.LastName}, Spec: {doctor.Specialization}");
+                                    Console.WriteLine(doctor);
                                 }
                             }
                             break;

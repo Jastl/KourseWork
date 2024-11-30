@@ -7,9 +7,10 @@ namespace Registry
 {
     public static class RegistyManager
     {
-        private static List<Doctor> doctors;
-        private static List<Appointment> appointments;
-        public static readonly string savePath = "C:/";
+        private static List<Doctor> doctors = new List<Doctor>();
+        private static List<Appointment> appointments = new List<Appointment>();
+        public static readonly string savePathDoctors = @"D:\doctors.json";
+        public static readonly string savePathAppointment = @"D:\apointments.json";
 
         public static void AddAppointment(Patient patient, int doctorId, DateTime dateTime)
         {
@@ -18,21 +19,42 @@ namespace Registry
                 Console.WriteLine("Лікаря з таким id не існує.");
             }
             AddElement<Appointment>(appointments, new Appointment(patient, doctors[doctorId], dateTime));
+            SaveData();
         }
 
-        public static void RemoveAppointment(int id) => appointments[id] = null;
+        public static void RemoveAppointment(int id)
+        {
+            appointments[id] = null;
+            SaveData();
+        }
 
-        public static void AddDoctor(string firstName, string lastName, string specification) => AddElement<Doctor>(doctors, new Doctor(firstName, lastName, specification));
-        public static void RemoveDoctor(int id) => doctors[id] = null;
+        public static void AddDoctor(string firstName, string lastName, string specification)
+        {
+            AddElement<Doctor>(doctors, new Doctor(firstName, lastName, specification));
+            SaveData();
+        }
+        public static void RemoveDoctor(int id) 
+        {
+            doctors[id] = null;
+            SaveData();
+        }
         public static void SaveData()
         {
-            FileManager<Doctor> fileDoctors = new FileManager<Doctor>(savePath + "doctors.txt");
+            FileManager<Doctor> fileDoctors = new FileManager<Doctor>(savePathDoctors);
             fileDoctors.SaveData(doctors);
-            FileManager<Appointment> fileAppointments = new FileManager<Appointment>(savePath + "appointments.txt");
+            FileManager<Appointment> fileAppointments = new FileManager<Appointment>(savePathAppointment);
             fileAppointments.SaveData(appointments);
         }
+        public static void LoadData()
+        {
+            FileManager<Doctor> fileDoctors = new FileManager<Doctor>(savePathDoctors);
+            doctors = fileDoctors.LoadData();
+            FileManager<Appointment> fileAppointments = new FileManager<Appointment>(savePathAppointment);
+            appointments = fileAppointments.LoadData();
+        }
+        public static List<Doctor> GetDoctors() => doctors;
 
-
+        public static List<Appointment> GetAppointments() => appointments;
         private static void AddElement<T>(List<T> array, T element) where T : IIdenteficable 
         {
             for (int i = 0; i < array.Count; i++)

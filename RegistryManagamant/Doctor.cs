@@ -8,11 +8,15 @@
         public string Specialization { get; set; }
         public Dictionary<DateTime, bool> Schedule { get; set; } = new Dictionary<DateTime, bool>();
 
-        public Doctor(string firstName, string lastNamem, string specification)
+        public Doctor(string firstName, string lastName, string specialization)
         {
             FirstName = firstName;
-            LastName = lastNamem;
-            Specialization = specification;
+            LastName = lastName;
+            Specialization = specialization;
+        }
+        public override string ToString()
+        {
+            return $"Id: {Id}, Name: {FirstName}, Surname: {LastName}, Specialization: {Specialization}";
         }
     }
 }

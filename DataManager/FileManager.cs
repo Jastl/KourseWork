@@ -2,7 +2,7 @@
 
 namespace FileManagmant
 {
-    public class FileManager<T>
+    public class FileManager<T> where T : class
     {
         private readonly string _filePath;
 
@@ -13,13 +13,16 @@ namespace FileManagmant
 
         public void SaveData(List<T> data)
         {
-            if (!File.Exists(_filePath)) File.Create(_filePath);
-            var json = JsonSerializer.Serialize(data);
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.IncludeFields = true;
+            var json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(_filePath, json);
         }
 
         public List<T> LoadData()
         {
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.IncludeFields = true;
             if (!File.Exists(_filePath)) return new List<T>();
             var json = File.ReadAllText(_filePath);
             return JsonSerializer.Deserialize<List<T>>(json);

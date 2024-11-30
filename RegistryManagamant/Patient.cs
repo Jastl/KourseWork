@@ -7,11 +7,11 @@
         public DateTime DateOfBirth { get; set; }
         public string PhoneNumber { get; set; }
 
-        public Patient(string firstName, string lastName, DateTime dateOfDirth, string phoneNumber)
+        public Patient(string firstName, string lastName, DateTime dateOfBirth, string phoneNumber)
         {
             FirstName = firstName;
             LastName = lastName;
-            DateOfBirth = dateOfDirth;
+            DateOfBirth = dateOfBirth;
             PhoneNumber = phoneNumber;
         }
     }
