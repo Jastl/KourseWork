@@ -4,10 +4,10 @@ using System.Numerics;
 
 namespace Registry
 {
-    internal static class RegistyManager
+    public static class RegistyManager //змінив на public 
     {
-        private static Doctor[] doctors;
-        private static Appointment[] appointments;
+        private static Doctor[] doctors = new Doctor[0]; //ініцілізував спроба вирішити проблему ТЕЖ НЕЗНАЮ ЧИ ВОНО ПОТРІБНО НАМ БУДЕ ЯКЩО МИ БУДЕМО З JSON-А БРАТИ АЛЕ ПОКИ ТАК ПОКИ Я РОБЛЮ ПЕРЕВІРКИ
+        private static Appointment[] appointments = new Appointment[0];// ініцілізував спроба вирішити проблему
 
         public static void AddAppointment(Patient patient, int doctorId, DateTime dateTime)
         {
@@ -15,15 +15,18 @@ namespace Registry
             {
                 Console.WriteLine("Лікаря з таким id не існує.");
             }
-            AddElement<Appointment>(appointments, new Appointment(patient, doctors[doctorId], dateTime));
+            AddElement<Appointment>(ref appointments, new Appointment(patient, doctors[doctorId], dateTime));//ref додав
         }
 
         public static void RemoveAppointment(int id) => appointments[id] = null;
 
-        public static void AddDoctor(string firstName, string lastName, string specification) => AddElement<Doctor>(doctors, new Doctor(firstName, lastName, specification));
+        public static void AddDoctor(string firstName, string lastName, string specification) => AddElement<Doctor>(ref doctors, new Doctor(firstName, lastName, specification));//ref додав
         public static void RemoveDoctor(int id) => doctors[id] = null;
-
-        private static void AddElement<T>(T[] array, T element) where T : IIdenteficable 
+        public static Doctor[] GetDoctors()// додав щоб отримувати докторів впринципі я не знаю чи потрібно переписувати під json
+        {
+            return doctors;
+        }
+        private static void AddElement<T>(ref T[] array, T element) where T : IIdenteficable //(T[] array, T element) --> (ref T[] array, T element) бо воно без нього не додає в масив нічого 
         {
             for (int i = 0; i < array.Length; i++)
             {
