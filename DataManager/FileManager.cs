@@ -13,6 +13,7 @@ namespace FileManagmant
 
         public void SaveData(List<T> data)
         {
+            if (!File.Exists(_filePath)) File.Create(_filePath);
             var json = JsonSerializer.Serialize(data);
             File.WriteAllText(_filePath, json);
         }

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Data;
 using System.Numerics;
+using FileManagmant;
 
 namespace Registry
 {
-    internal static class RegistyManager
+    public static class RegistyManager
     {
-        private static Doctor[] doctors;
-        private static Appointment[] appointments;
+        private static List<Doctor> doctors;
+        private static List<Appointment> appointments;
+        public static readonly string savePath = "C:/";
 
         public static void AddAppointment(Patient patient, int doctorId, DateTime dateTime)
         {
@@ -22,21 +24,29 @@ namespace Registry
 
         public static void AddDoctor(string firstName, string lastName, string specification) => AddElement<Doctor>(doctors, new Doctor(firstName, lastName, specification));
         public static void RemoveDoctor(int id) => doctors[id] = null;
-
-        private static void AddElement<T>(T[] array, T element) where T : IIdenteficable 
+        public static void SaveData()
         {
-            for (int i = 0; i < array.Length; i++)
+            FileManager<Doctor> fileDoctors = new FileManager<Doctor>(savePath + "doctors.txt");
+            fileDoctors.SaveData(doctors);
+            FileManager<Appointment> fileAppointments = new FileManager<Appointment>(savePath + "appointments.txt");
+            fileAppointments.SaveData(appointments);
+        }
+
+
+        private static void AddElement<T>(List<T> array, T element) where T : IIdenteficable 
+        {
+            for (int i = 0; i < array.Count; i++)
             {
-                if (array[i] == null)
+                if (object.Equals(array[i], default(T)))
                 {
                     array[i] = element;
                     element.Id = i;
                     return;
                 }
             }
-            Array.Resize(ref array, array.Length + 1);
+            array.Add(element);
             array[^1] = element;
-            element.Id = array.Length - 1;
+            element.Id = array.Count - 1;
         }
     }
 }
